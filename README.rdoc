@@ -1,6 +1,8 @@
 = querystring
 
-Description goes here.
+Generate an HTTP querysting from a Hash in many ways.  I'll add query string
+parsing at some point.  The code is pretty small, so take a look.  I promise to
+document soon.
 
 == Contributing to querystring
  
