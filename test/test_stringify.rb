@@ -40,5 +40,9 @@ class QueryStringTest < Test::Unit::TestCase
       assert_equal(v,k)
     end
   end
+
+  def test_version
+    assert_not_nil(QueryString::VERSION)
+  end
 end
 
