@@ -1,7 +1,8 @@
 require 'cgi'
-require 'querystring/version'
 
 module QueryString
+  VERSION = File.read(File.expand_path('../../VERSION', __FILE__)).strip
+
   def self.stringify obj, options={}
     o = {
       :seperator => '&',             # between params

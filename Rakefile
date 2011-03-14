@@ -13,10 +13,10 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "querystring"
-  gem.homepage = "http://github.com/dokipen/querystring"
+  gem.homepage = "http://github.com/dokipen/ruby-querystring"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Final solution for HTTP querystrings}
+  gem.description = %Q{Flexible querystring generator}
   gem.email = "bob@embed.ly"
   gem.authors = ["Bob Corsaro"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
