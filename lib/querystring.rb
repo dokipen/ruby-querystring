@@ -41,5 +41,27 @@ module QueryString
       end
     end.join o[:seperator]
   end
+
+  def self.parse q, options={}
+    o = {
+      :seperator => '&',             # between params
+      :equals => '=',                # between key/value pairs
+      :array_seperator => ','        # used with :combine array style
+    }.merge(options)
+
+    q.split(o[:seperator]).inject({}) do |ret, pair|
+      key, value = pair.split(o[:equals])
+      value.split(o[:array_seperator]).inject(ret) do |ret, part|
+        key =~ /([^\[]+)(\[(\d)?\])?/
+        ret[$1] ||= []
+        if $3
+          ret[$1][$3.to_i] = CGI.unescape(part)
+        else
+          ret[$1] << CGI.unescape(part)
+        end
+        ret
+      end
+    end
+  end
 end
 
