@@ -44,7 +44,7 @@ module QueryString
 
   def self.parse q, options={}
     o = {
-      :seperator => '&',             # between params
+      :seperator => /&|;/,            # between params
       :equals => '=',                # between key/value pairs
       :array_seperator => ','        # used with :combine array style
     }.merge(options)
