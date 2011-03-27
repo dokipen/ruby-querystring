@@ -1,8 +1,148 @@
 = querystring
 
-Generate an HTTP querysting from a Hash in many ways.  I'll add query string
-parsing at some point.  The code is pretty small, so take a look.  I promise to
-document soon.
+A small and flexible library to parse and create HTTP query strings.
+
+Many languages, libraries and application use different styles of query
+strings.  Specifically, query arrays seem to take on many different forms
+accross the web.  Some APIs use multiple name/value pairs with the same name to
+represent arrays.  Others use the '[]' notation, and some even include an index
+in the brackets.  Other APIs use a comma seperated list of values, with only
+one name parameter.  querystring is meant to be flexible enough to create and
+parse in any style.
+
+== Usage
+
+QueryString provides stringify and parse methods.  Both methods take an optional
+hash as a second parameter defining the behavior of the function.
+
+=== Stringify
+
+Default stringify options::
+  {
+    :seperator => '&',             # between params
+    :equals => '=',                # between key/value pairs
+    :array_style => :seperate,     # or :combine
+    :array_brackets => false,      # use [] with array_style :seperate
+    :array_index => false,         # use indexes with array style :seperate
+    :array_seperator => ','        # used with :combine array style
+  }
+
+The array_ options need some explaining.  For style, :seperated means that each
+element in the array will get it's own name/value pair.  Combined means that
+they will be combined into one name/value pair.
+
+For seperate style, brackets is used to determine if '[]' should be appended to
+each name/value pair.  If index is specified, then the index number will be put
+inside the brackets, or appended to the name if brackets is false.
+
+For combined style, we have the seperator option.  seperator is used to determine
+how they will be combined.
+
+=== Parse
+
+Parse always parses into arrays for simplicities sake.  Every value is an array.
+
+== Examples
+
+  >> ########################
+  >> # stringify
+  >> ########################
+  >>
+  >> require 'querystring'
+  >>
+  >> obj = {
+    :name => 'bob',
+    :roles => [
+      'maintainer',
+      'contributor'
+    ],
+    :homepage => 'http://www.google.com/profiles/rcorsaro'
+  }
+  >>
+  >> puts QueryString.stringify(obj)
+  name=bob&roles=maintainer&roles=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
+  >>
+  >> puts QueryString.stringify(obj, {:seperator => '*'})
+  name=bob*roles=maintainer*roles=contributor*homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
+  >>
+  >> puts QueryString.stringify(obj, {:array_brackets => true})
+  name=bob&roles[]=maintainer&roles[]=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
+  >>
+  >> puts QueryString.stringify(obj, {:array_brackets => true, :array_index => true})
+  name=bob&roles[0]=maintainer&roles[1]=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
+  >>
+  >> puts QueryString.stringify(obj, {:array_index => true})
+  name=bob&roles0=maintainer&roles1=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
+  >>
+  >> puts QueryString.stringify(obj, {:array_style => :combined})
+  name=bob&roles=maintainer,contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
+  >>
+  >> # Be careful with this because we do no check to make sure your seperator is sane.
+  >> # '+' would usually be a bad choice since values can potentially have a space in
+  >> # them, which is converted to '+' when encoded.  But you know what you doing, so
+  >> # we let you go about your work.
+  >> puts QueryString.stringify(obj, {:array_style => :combined, :array_seperator => '!'})
+  name=bob&roles=maintainer!contributor
+  >>
+  >> ########################
+  >> # stringify
+  >> ########################
+  >>
+  >> require 'ap'
+  >>
+  >> ap QueryString.parse('name=bob&roles=maintainer&roles=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro')
+  {
+      "name" => [
+          [0] "bob",
+      ],
+      "roles => [
+          [0] "maintainer",
+          [1] "contributor"
+      ],
+      "homepage" => [
+          [0] "http://www.google.com/profiles/rcorsaro"
+  }
+  >> ap QueryString.parse('name=bob*roles=maintainer*roles=contributor*homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro', :seperator => '*')
+  {
+      "name" => [
+          [0] "bob",
+      ],
+      "roles => [
+          [0] "maintainer",
+          [1] "contributor"
+      ],
+      "homepage" => [
+          [0] "http://www.google.com/profiles/rcorsaro"
+  }
+  >> ap QueryString.parse('name=bob&roles[]=maintainer&roles[]=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro')
+  {
+      "name" => [
+          [0] "bob",
+      ],
+      "roles => [
+          [0] "maintainer",
+          [1] "contributor"
+      ],
+      "homepage" => [
+          [0] "http://www.google.com/profiles/rcorsaro"
+  }
+  >> ap QueryString.parse('name=bob&roles[0]=maintainer&roles[1]=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro')
+  {
+      "name" => [
+          [0] "bob",
+      ],
+      "roles => [
+          [0] "maintainer",
+          [1] "contributor"
+      ],
+      "homepage" => [
+          [0] "http://www.google.com/profiles/rcorsaro"
+  }
+
+
+
+
+
 
 == Contributing to querystring
  
