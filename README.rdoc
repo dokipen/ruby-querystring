@@ -74,7 +74,7 @@ Parse always parses into arrays for simplicities sake.  Every value is an array.
   >> puts QueryString.stringify(obj, {:array_index => true})
   name=bob&roles0=maintainer&roles1=contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
   >>
-  >> puts QueryString.stringify(obj, {:array_style => :combined})
+  >> puts QueryString.stringify(obj, {:array_style => :combine})
   name=bob&roles=maintainer,contributor&homepage=http%3a%2f%2fwww.google.com%2fprofiles%2frcorsaro
   >>
   >> # Be careful with this because we do no check to make sure your seperator is sane.
